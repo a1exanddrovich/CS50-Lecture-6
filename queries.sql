@@ -20,3 +20,18 @@ SELECT DISTINCT title FROM shows WHERE id IN (SELECT show_id FROM genres WHERE g
 
 INSERT INTO shows (title) VALUES ("Seinfeld");
 INSERT INTO genres (show_id, genre) VALUES ((SELECT id FROM shows WHERE title = "Seinfeld"), "Comedy");
+
+-- indexes
+CREATE INDEX "title_index" ON "shows" ("title");
+
+-- joins (many to many)
+SELECT id FROM people WHERE name = "Steve Carell";
+SELECT show_id FROM stars WHERE  person_id = (SELECT id FROM people WHERE name = "Steve Carell");
+SELECT title FROM shows WHERE id IN (SELECT show_id FROM stars WHERE  person_id = (SELECT id FROM people WHERE name = "Steve Carell")) ORDER BY title;
+
+
+SELECT title
+FROM people
+JOIN stars ON people.id = stars.person_id
+JOIN shows ON stars.show_id = show.id
+WHERE name = "Steve Carell";
